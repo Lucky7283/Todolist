@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+</head>
+<style>
+    .container {
+        color: #666;
+        margin-top: 30%;
+        margin: 10%;
+        border: 2px solid #666;
+        padding: 10px;
+        border-radius: 10px;
+    }
+</style>
+
+<body>
+    <h1 class="text-center" style="margin-top: 5%;">Login</h1>
+    <form class="container">
+
+        <td>
+            <tr>
+                <input type="text" name="username" id="username" placeholder="Enter username" class="input-group">
+
+            </tr>
+        </td>
+        <td>
+            <tr>
+                <input type="password" name="password" id="password" placeholder="Enter password" class="input-group" autocomplete="on">
+                <div class="btn btn-outline-primary"  onclick="ShowPassword()" id="show/hide">Show Password</div>
+
+            </tr>
+        </td>
+        <button type="button" class="btn btn-outline-primary btn-lg" style="align-content:center ;" onclick="login()">
+            Login
+        </button>
+        <a class="btn btn-outline-primary" href="/register">Register here</a>
+
+
+    </form>
+    <div style="display: none; background-color: red; color: white;margin: 1%; text-align: center;" id="ResponseForUser">
+    </div>
+
+</body>
+<script>
+    async function login() {
+        let login = document.getElementById('username').value;
+        let password = document.getElementById('password').value;
+        try {
+            let response = await fetch("/login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify(
+                        { "username": login, "password": password }
+
+                    )
+                }
+
+            )
+            response = await response.json();
+            if (response['status'] == 200 || response['status'] == 409) {
+                window.location.reload()
+            } else {
+                errorel = document.getElementById('ResponseForUser')
+                errorel.innerText = response['text']
+                errorel.style.display = "block"
+            }
+
+        } catch (err) {
+            errorel = document.getElementById('error')
+            errorel.value = err
+            errorel.style.display = "block"
+        }
+    }
+    document.addEventListener("keydown", KeyEvent)
+    function KeyEvent(event) {
+        if (event.key == "Enter") {
+            login()
+        }
+    }
+    function ShowPassword() {
+        
+        let input_password = document.getElementById('password')
+        
+        if (input_password.type == 'text') {
+            input_password.type = 'password'
+            document.getElementById('show/hide').innerText = 'Show Password'
+
+        }
+        else{
+            input_password.type = 'input-group'
+            document.getElementById('show/hide').innerText = 'Hide Password'
+        }
+    }
+
+</script>
+
+</html>
