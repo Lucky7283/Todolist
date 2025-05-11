@@ -1,4 +1,4 @@
-# A simple Todolist web app using #
+# A simple Todolist web app #
 # Frontend: #
 * HTML
 * CSS
